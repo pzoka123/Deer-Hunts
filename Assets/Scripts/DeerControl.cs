@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DeerControl : MonoBehaviour {
 
+    GameObject sceneManager;
+
     public Sprite stand;
     public Sprite crouch;
     public GameObject bullet;
@@ -26,6 +28,8 @@ public class DeerControl : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        sceneManager = GameObject.Find("SceneManager");
+
         clip = new GameObject[maxBullet];
         for (int i = 0; i < maxBullet; i++)
         {
@@ -104,6 +108,7 @@ public class DeerControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space) && canShoot)
         {
             GameObject newBullet = Instantiate(bullet, gameObject.transform.position + new Vector3(0.20f * isFlip, bulletOffsetY, 0.0f), Quaternion.identity) as GameObject;
+            gameObject.transform.GetChild(0).GetComponent<AudioSource>().Play();
             bulletNum -= 1;
         }
 

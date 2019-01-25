@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class HumanMove : MonoBehaviour {
 
+    GameObject sceneManager;
+
     Rigidbody2D rgbd;
     Animator anim;
     float isFlip = 1;
@@ -13,6 +15,8 @@ public class HumanMove : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        sceneManager = GameObject.Find("SceneManager");
+
         rgbd = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
         if (gameObject.GetComponent<SpriteRenderer>().flipX)
@@ -41,6 +45,10 @@ public class HumanMove : MonoBehaviour {
                 gameObject.transform.position = new Vector3(gameObject.transform.position.x, -1.41f);
             }
         }
+        else if (sceneManager.GetComponent<SceneManager>().Health <= 0)
+        {
+            rgbd.velocity = Vector2.zero;
+        }
         else
         {
             rgbd.velocity = new Vector2(isFlip * 175.0f * Time.deltaTime, 0.0f);
@@ -54,6 +62,15 @@ public class HumanMove : MonoBehaviour {
             rgbd.velocity = new Vector2(-rgbd.velocity.x * 0.5f, 0.5f);
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             isHit = true;
+            sceneManager.GetComponent<SceneManager>().Score += 1;
+            gameObject.GetComponent<AudioSource>().Play();
+            Destroy(gameObject, 5.0f);
+        }
+
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<AudioSource>().Play();
+            sceneManager.GetComponent<SceneManager>().Health -= 1;
             Destroy(gameObject, 5.0f);
         }
     }

@@ -1,9 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SceneManager : MonoBehaviour {
+
     public GameObject enemy;
+    public Text scoreText;
+    int score = 0;
+    public int Score
+    {
+        get { return score; }
+        set { score = value; }
+    }
+
+    public RectTransform healthObj;
+    int health;
+    public int Health
+    {
+        get { return health; }
+        set { health = value; }
+    }
+    Image[] hearts;
+    const int maxHeart = 3;
 
     float timer = 0;
     bool isTime = true;
@@ -14,12 +33,29 @@ public class SceneManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        health = maxHeart;
+        hearts = new Image[maxHeart];
+        for (int i = 0; i < maxHeart; i++)
+        {
+            hearts[i] = healthObj.GetChild(i).GetComponent<Image>();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        scoreText.text = "Score: " + score;
+
+        if (health < maxHeart)
+        {
+            hearts[health].GetComponent<Image>().enabled = false;
+        }
+        
+        if (health <= 0)
+        {
+            spawnTime = 0;
+        }
+
         timer += Time.deltaTime;
 
         if (isTime == true)
