@@ -71,7 +71,11 @@ public class HumanMove : MonoBehaviour {
         {
             collision.gameObject.GetComponent<AudioSource>().Play();
             sceneManager.GetComponent<SceneManager>().Health -= 1;
-            Destroy(gameObject, 5.0f);
+            collision.gameObject.GetComponent<DeerControl>().Anim.SetInteger("Health", sceneManager.GetComponent<SceneManager>().Health);
+            if (sceneManager.GetComponent<SceneManager>().Health <= 0)
+                Destroy(gameObject, 2.0f);
+            else
+                Destroy(gameObject, 5.0f);
         }
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SceneManager : MonoBehaviour {
 
+    GameObject player;
+
     public GameObject enemy;
     public Text scoreText;
     int score = 0;
@@ -13,6 +15,8 @@ public class SceneManager : MonoBehaviour {
         get { return score; }
         set { score = value; }
     }
+
+    public Image damaged;
 
     public RectTransform healthObj;
     int health;
@@ -33,6 +37,7 @@ public class SceneManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         health = maxHeart;
         hearts = new Image[maxHeart];
         for (int i = 0; i < maxHeart; i++)
@@ -48,15 +53,18 @@ public class SceneManager : MonoBehaviour {
 
         if (health < maxHeart)
         {
-            hearts[health].GetComponent<Image>().enabled = false;
+            if (health >= 0)
+                hearts[health].GetComponent<Image>().enabled = false;
         }
         
-        if (health <= 0)
+        if (health > 0)
         {
-            spawnTime = 0;
+            timer += Time.deltaTime;
         }
-
-        timer += Time.deltaTime;
+        else
+        {
+            player.transform.GetChild(0).gameObject.SetActive(false);
+        }
 
         if (isTime == true)
         {

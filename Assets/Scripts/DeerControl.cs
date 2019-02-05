@@ -9,6 +9,12 @@ public class DeerControl : MonoBehaviour {
     public Sprite stand;
     public Sprite crouch;
     public GameObject bullet;
+    Animator anim;
+    public Animator Anim
+    {
+        get { return anim; }
+        set { anim = value; }
+    }
 
     GameObject[] clip;
     const int maxBullet = 3;
@@ -29,6 +35,7 @@ public class DeerControl : MonoBehaviour {
 	void Start ()
     {
         sceneManager = GameObject.Find("SceneManager");
+        anim = gameObject.GetComponent<Animator>();
 
         clip = new GameObject[maxBullet];
         for (int i = 0; i < maxBullet; i++)
@@ -73,7 +80,7 @@ public class DeerControl : MonoBehaviour {
         //Crouching control
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = crouch;
+            anim.SetBool("Crouch", true);
             gameObject.GetComponent<BoxCollider2D>().offset = new Vector2(0.0f, -0.06f);
             gameObject.GetComponent<BoxCollider2D>().size = new Vector2(0.2f, 0.27f);
 
@@ -82,7 +89,7 @@ public class DeerControl : MonoBehaviour {
         }
         else
         {
-            gameObject.GetComponent<SpriteRenderer>().sprite = stand;
+            anim.SetBool("Crouch", false);
             gameObject.GetComponent<BoxCollider2D>().offset = new Vector2(0.0f, -0.03f);
             gameObject.GetComponent<BoxCollider2D>().size = new Vector2(0.2f, 0.34f);
 
